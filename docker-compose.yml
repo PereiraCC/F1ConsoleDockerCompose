@@ -1,0 +1,36 @@
+
+services:
+  
+  app:
+
+    image: pereira00/f1console:gato
+    depends_on:
+      - db
+    restart: always
+    container_name: f1-app
+    ports:
+      - "3000:80"
+    stdin_open: true
+    tty: true
+    environment:
+      SERVER : ${SERVER}
+      BD : ${BD}
+      USERBD : ${USERBD}
+      PASSWORD : ${PASSWORD}
+
+  db:
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    restart: always
+    ports:
+      - "1433:1433"
+    environment:
+      ACCEPT_EULA: ${ACCEPT_EULA}
+      MSSQL_SA_PASSWORD: ${PASSWORD}
+      MSSQL_PID: ${MSSQL_PID}
+    container_name: ${SERVER}
+    volumes:
+      - bd-f1:/var/opt/mssql
+
+volumes:
+  bd-f1:
+    external: false
